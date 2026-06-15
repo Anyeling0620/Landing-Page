@@ -2,6 +2,7 @@ import { Container } from "../shared/Container";
 import logo from "../../assets/ai.png";
 import { NavItem } from "../shared/NavItem";
 import { ButtonLink } from "../shared/ButtonLink";
+import { useThemeStore } from "../../store/ThemeStore";
 const navItems = [
   { href: "#", text: "Home" },
   { href: "#services", text: "Services" },
@@ -10,6 +11,8 @@ const navItems = [
 ];
 
 export const Navbar = () => {
+  const { toggleTheme, theme } = useThemeStore();
+
   return (
     <header className="absolute inset-x-0 top-0 z-50 py-6">
       <Container>
@@ -41,16 +44,36 @@ export const Navbar = () => {
 
             <div
               className="lg:min-w-max flex items-center sm:w-max w-full pb-6 lg:pb-0
-                            border-b-1 border-box-border lg:border-0 px-6 lg:px-0"
+                            border-b border-box-border lg:border-0 px-6 lg:px-0 mx-1
+                          "
             >
               <ButtonLink text="Get Started" href="#cta" className="" />
             </div>
 
-            <div className="min-w-max flex items-center gap-x-3">
-              <button className="outline-hidden flex relative 
+            <div
+              className="min-w-max flex items-center gap-x-3"
+            >
+              <button
+                onClick={toggleTheme}
+                className="outline-hidden flex relative 
                       text-heading-2 rounded-full p-2 lg:p-3
-                      border-box-border cursor-pointer">
-
+                      border border-box-border cursor-pointer 
+                      "
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  className="h-8 w-8"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z"
+                  />
+                </svg>
               </button>
             </div>
           </div>
