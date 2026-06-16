@@ -11,7 +11,7 @@ const navItems = [
 ];
 
 export const Navbar = () => {
-  const { toggleTheme, theme } = useThemeStore();
+  const { toggleTheme } = useThemeStore();
 
   return (
     <header className="absolute inset-x-0 top-0 z-50 py-6">
@@ -33,7 +33,7 @@ export const Navbar = () => {
                           border-x border-x-box-border lg:border-x-0 lg:h-auto h-0 overflow-hidden"
           >
             <ul
-              className="border-t lg: border-t-0 border-box-border px-6 lg: px-0
+              className="border-t lg:border-t-0 border-box-border px-6 lg:px-0
                            pt-6 lg:pt-0 flex flex-col lg:flex-row gap-y-4 gap-x-3 
                            text-lg text-heading-2 w-full lg:justify-center lg:items-center"
             >
@@ -66,7 +66,7 @@ export const Navbar = () => {
                   viewBox="0 0 24 24"
                   stroke-width="1.5"
                   stroke="currentColor"
-                  className="h-8 w-8"
+                  className="h-6 w-6"
                 >
                   <path
                     stroke-linecap="round"
