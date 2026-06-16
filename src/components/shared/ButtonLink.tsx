@@ -7,7 +7,7 @@ interface ButtonLinkProps {
 export const ButtonLink = ({ href, text, className = "" }: ButtonLinkProps) => {
   return (
     <a href={href} className={`px-6 py-3 rounded-full outline-none
-                   relative overflow-hidden bg-amber-300 dark:bg-violet-600
+                   relative overflow-hidden bg-violet-400 dark:bg-violet-600
                    cursor-pointer  ${className}`}>
       <span className="relative z-10 text-white ">
         {text}
