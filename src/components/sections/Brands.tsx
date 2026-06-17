@@ -26,7 +26,7 @@ export const Brands = () => {
                 </div>
 
                 <img
-                  src={`src/assets/logos/${logo}.png`}
+                  src={new URL(`../../assets/logos/${logo}.png`, import.meta.url).href}
                   alt={`${logo}`}
                   width="100"
                   height="60"
@@ -42,3 +42,4 @@ export const Brands = () => {
     </section>
   );
 };
+
