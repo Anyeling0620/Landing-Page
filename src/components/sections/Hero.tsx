@@ -32,14 +32,33 @@ export const Hero = () => {
             Empower Your Business{" "}
             <span
               className="
-          text-transparent bg-clip-text bg-gradient-to-r
-          from-blue-600 to-violet-600 ml-2"
+          text-transparent bg-clip-text bg-linear-to-r
+          from-indigo-600 via-purple-500 to-violet-600 ml-2 bg-[length:200%_auto]"
+              style={{
+                backgroundSize: "200% auto",
+                animation: "gradientFlow 0.5s linear infinite",
+              }}
             >
               with AI
             </span>
           </h1>
           <Paragraph className="mt-8">
-            你好，我是DeepSeek，由深度求索公司创造的AI助手，我的知识截止到2025年5月，擅长编程、算法、技术解答、学习辅导和创意写作等各种任务，完全免费使用，支持1M超长上下文和文件上传，风格耐心细致、务实直接，喜欢用具体例子把复杂问题讲清楚，无论你是初学者还是资深开发者，我都愿意尽我所能帮你解决问题、理清思路。
+            <span className="font-semibold text-transparent bg-clip-text bg-linear-to-r from-indigo-600 to-violet-600">
+              Deepsleep
+            </span>
+            让您的企业在AI浪潮中领先一步。我们提供开箱即用的智能解决方案，从数据分析到流程自动化，助您降本增效、洞察先机。无需深厚技术背景，即可拥有专属AI引擎。加入
+            <span
+              className="font-semibold text-transparent bg-clip-text 
+             bg-linear-to-r from-indigo-600 via-purple-500 to-violet-600 
+             bg-[length:200%_auto]"
+              style={{
+                backgroundSize: "200% auto",
+                animation: "gradientFlow 3s linear infinite",
+              }}
+            >
+              Deepsleep
+            </span>
+            ，让AI成为您最可靠的商业伙伴，开启智能增长新篇章。
           </Paragraph>
           <div className="mt-10 w-full flex max-w-md mx-auto lg:mx-0">
             <div className="flex sm:flex-row flex-col gap-5 w-full">
@@ -69,7 +88,7 @@ export const Hero = () => {
                 <input
                   type="email"
                   placeholder="ANYELING@gmail.com"
-                  className="w-full py-3 outline-none bg-transparent"
+                  className="w-full py-3 outline-none bg-transparent placeholder-[rgb(var(--heading-3))]"
                 />
 
                 <Button className="min-w-max text-white">
@@ -96,9 +115,7 @@ export const Hero = () => {
         </div>
       </Container>
 
-      <Numbers>
-        
-      </Numbers>
+      <Numbers></Numbers>
     </section>
   );
 };

@@ -14,8 +14,8 @@
 html.dark {
   --color-bg: 3 7 8;
   --color-box: 17 24 39;
-  --color-border: 243 244 246 / 0.1; 
-  --box-sd: transparent;
+  --color-border: 243 244 246 / 0.1;
+  --box-sd: 0 0 0;
   --heading-1: 255 255 255;
   --heading-2: 243 244 246;
   --heading-3: 209 213 219;
@@ -37,10 +37,13 @@ html.dark {
   .text-heading-3 {
     color: rgb(var(--heading-3));
   }
+  .box-shadow {
+    box-shadow: 0 10px 15px -3px rgb(var(--box-sd) / 0.5), 0 4px 6px -4px rgb(var(--box-sd) / 0.25);
+  }
 }
 
 html {
-  scroll-behavior: smooth;   
+  scroll-behavior: smooth;
 }
 
 body {

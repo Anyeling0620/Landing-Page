@@ -1,14 +1,10 @@
 import { Container } from "../shared/Container";
-import logo from "../../assets/ai.png";
+import logo from "../../assets/Deepsleep.png";
 import { NavItem } from "../shared/NavItem";
 import { ButtonLink } from "../shared/ButtonLink";
 import { useThemeStore } from "../../store/ThemeStore";
-const navItems = [
-  { href: "#", text: "Home" },
-  { href: "#services", text: "Services" },
-  { href: "#about-us", text: "About Us" },
-  { href: "#pricing", text: "Pricing" },
-];
+import { navItems } from "../../utils/navItems";
+
 
 export const Navbar = () => {
   const { toggleTheme } = useThemeStore();
@@ -20,9 +16,9 @@ export const Navbar = () => {
           {/* Logo */}
           <div className="min-w-max inline-flex relative">
             <a href="/" className="relative flex items-center gap-3">
-              <img src={logo} alt="AI logo" className="w-10 h-10" />
+              <img src={logo} alt="Deepsleep Logo" className="w-10 h-10" />
               <div className="inline-flex text-lg font-semibold text-heading-1">
-                AI
+                Deepsleep
               </div>
             </a>
           </div>
