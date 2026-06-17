@@ -107,3 +107,23 @@ body {
 
 
 
+# 9.自动部署到服务器
+
+### github仓库设置仓库变量SITE_ROOT，内容如/www/wwwroot/baidu.com/
+
+### 安装pm2
+
+### 完成.github/workflows/deploy.yml，注意
+
+```yaml
+  runs-on: self-hosted
+```
+
+### 创建runner用户来安装github runner，位置位于/home/runner-{`${SITE}`}
+
+### 使用pm2管理runner进程
+
+```bash
+sudo -u runner pm2 start/stop/restart/delete/logs
+```
+

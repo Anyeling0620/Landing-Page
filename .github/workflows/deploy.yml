@@ -62,6 +62,7 @@ jobs:
           script: |
             SITE_PATH="${{ vars.SITE_ROOT }}"
             sudo mkdir -p "$SITE_PATH"
+            sudo chattr -R -i "$SITE_PATH" 2>/dev/null || true
             sudo rm -rf "${SITE_PATH:?}"/*
             sudo chown -R "$USER:$USER" "$SITE_PATH"
 
@@ -86,3 +87,4 @@ jobs:
           script: |
             sudo chown -R www:www "${{ vars.SITE_ROOT }}" 2>/dev/null || true
             sudo nginx -s reload 2>/dev/null || sudo systemctl reload nginx 2>/dev/null || true
+
