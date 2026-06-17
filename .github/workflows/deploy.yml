@@ -1,4 +1,4 @@
-name: Deploy to Server
+name: Deploy to Cloud Server
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
 
 jobs:
   build-and-deploy:
-    runs-on: self-hosted # 使用自托管的 Runner
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
@@ -17,42 +17,64 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          # 暂时关闭 cache，防止网络不佳时缓存读取失败导致错误
-          # cache: "npm" 
-
-      - name: Configure npm and optimize network
-        run: |
-          # 强制设置镜像源
-          npm config set registry https://registry.npmmirror.com
-          # 增加超时时间（单位：毫秒），防止网络抖动导致的中断
-          npm config set fetch-retry-maxtimeout 300000
-          npm config set fetch-retry-mintimeout 20000
-          npm config set fetch-retries 10
-          npm config set fetch-timeout 300000
+          cache: "npm"
 
       - name: Install dependencies
-        run: npm ci --verbose
+        run: npm ci
 
       - name: Build project
         run: npm run build
 
-      - name: Update site directory
-        run: |
-          # 使用 GitHub Variables 中定义的路径
-          SITE_PATH="${{ vars.SITE_ROOT }}"
-          
-          # 检查路径是否为空，防止误删
-          if [ -z "$SITE_PATH" ]; then
-            echo "Error: SITE_ROOT variable is not set."
-            exit 1
-          fi
+      - name: Setup server (firewall + nginx)
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT || '22' }}
+          script: |
+            # 开放防火墙端口 9090
+            if command -v ufw &>/dev/null; then
+              sudo ufw allow 9090/tcp
+              sudo ufw reload 2>/dev/null || true
+            elif command -v firewall-cmd &>/dev/null; then
+              sudo firewall-cmd --permanent --add-port=9090/tcp
+              sudo firewall-cmd --reload
+            fi
 
-          echo "Deploying to $SITE_PATH"
-          # 确保目录存在
-          sudo mkdir -p $SITE_PATH
-          # 删除旧文件
-          sudo rm -rf $SITE_PATH/*
-          # 复制新文件
-          sudo cp -r dist/* $SITE_PATH/
-          # 修正权限，确保 Web 服务可读
-          sudo chown -R www:www $SITE_PATH/
+            # 配置 Nginx 监听 9090 端口
+            if command -v nginx &>/dev/null; then
+              SITE_PATH="${{ vars.SITE_ROOT }}"
+              CONF="/etc/nginx/sites-available/show1"
+
+              echo 'c2VydmVyIHsKICAgIGxpc3RlbiA5MDkwOwogICAgc2VydmVyX25hbWUgXzsKICAgIHJvb3QgL3Zhci93d3cvc2hvdzE7CiAgICBpbmRleCBpbmRleC5odG1sOwoKICAgIGxvY2F0aW9uIC8gewogICAgICAgIHRyeV9maWxlcyAkdXJpICR1cmkvIC9pbmRleC5odG1sOwogICAgfQoKICAgIGxvY2F0aW9uIH4qIFwuKGpzfGNzc3xwbmd8anBnfGpwZWd8Z2lmfGljb3xzdmd8d29mZjI/KSQgewogICAgICAgIGV4cGlyZXMgMzBkOwogICAgICAgIGFkZF9oZWFkZXIgQ2FjaGUtQ29udHJvbCAicHVibGljLCBpbW11dGFibGUiOwogICAgfQoKICAgIGFkZF9oZWFkZXIgWC1Db250ZW50LVR5cGUtT3B0aW9ucyAibm9zbmlmZiI7CiAgICBhZGRfaGVhZGVyIFgtRnJhbWUtT3B0aW9ucyAiREVOWSI7Cn0=' | base64 -d | sudo tee "$CONF" > /dev/null
+              sudo ln -sf "$CONF" /etc/nginx/sites-enabled/show1
+              sudo sed -i "s|root .*;|root $SITE_PATH;|" "$CONF"
+              sudo nginx -t && sudo systemctl reload nginx || true
+            fi
+
+      - name: Deploy build to cloud server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT || '22' }}
+          source: "dist/*"
+          target: ${{ vars.SITE_ROOT }}
+          strip_components: 1
+          rm: true
+
+      - name: Reload web server after deploy
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT || '22' }}
+          script: |
+            echo "Deployment complete to ${{ vars.SITE_ROOT }}"
+            sudo chown -R www:www ${{ vars.SITE_ROOT }} 2>/dev/null || true
+            sudo nginx -s reload 2>/dev/null || sudo systemctl reload nginx 2>/dev/null || true
+            echo "Site reloaded on port 9090"
+
