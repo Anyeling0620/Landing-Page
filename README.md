@@ -1,73 +1,107 @@
-# React + TypeScript + Vite
+# 1.创建新项目
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npx create-vite
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+# 2.安装依赖
+
+```
+npm install
+```
+
+# 3.启动服务
+
+```
+npm run dev
+```
+
+# 4.安装常用库
+
+```
+npm install tailwindcss @tailwindcss/vite zustand
+```
+
+# 5.初始化
+
+删除App.css
+
+删除App.tsx 的UI代码
+
+删除index.css全部内容
+
+# 6.修改vite.config.ts配置
+
+### 顶部引入
 
 ```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+import tailwindcss from '@tailwindcss/vite'
 ```
+
+### plugins数组加入tailwindcss()
+
+# 7.index.css(存放主题变量)
+
+```js
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --color-bg: 255 255 255;
+  --color-box: 255 255 255;
+  --color-border: 229 231 235;
+  --box-sd: 226 232 240;
+  --heading-1: 23 37 78;
+  --heading-2: 31 41 51;
+  --heading-3: 55 65 81;
+}
+
+html.dark {
+  --color-bg: 3 7 8;
+  --color-box: 17 24 39;
+  --color-border: 243 244 246 / 0.1; 
+  --box-sd: transparent;
+  --heading-1: 255 255 255;
+  --heading-2: 243 244 246;
+  --heading-3: 209 213 219;
+}
+
+@layer utilities {
+  .bg-body {
+    background-color: rgb(var(--color-bg));
+  }
+  .bg-box {
+    background-color: rgb(var(--color-box));
+  }
+  .text-heading-1 {
+    color: rgb(var(--heading-1));
+  }
+  .text-heading-2 {
+    color: rgb(var(--heading-2));
+  }
+  .text-heading-3 {
+    color: rgb(var(--heading-3));
+  }
+}
+
+html {
+  scroll-behavior: smooth;   
+}
+
+body {
+  font-family: 'Raleway', sans-serif;
+}
+```
+
+# 8.确定项目结构
+
+### src下创建components store utils
+
+### components下创建sections (因为是单页，分成了不同部分)
+
+### components下创建shared (多次重复使用的组件，比如按钮 容器)
+
+### components下创建elements (网站中不同元素)
+
+### components下创建cards (显示数字的卡片 显示服务的卡片等)
+

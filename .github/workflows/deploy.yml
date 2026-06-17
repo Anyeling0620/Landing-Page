@@ -1,0 +1,46 @@
+# Deploy Vite build output to server
+#
+# Prerequisites - add these secrets in GitHub repo Settings > Secrets and variables > Actions:
+#   SSH_PRIVATE_KEY    SSH private key for server access
+#   REMOTE_HOST        Server IP or domain (e.g. iZm5egov41dyufg81xschxZ)
+#   REMOTE_USER        SSH username (e.g. admin)
+#   REMOTE_TARGET      Server site directory (e.g. /www/wwwroot/home.jxutcm.top)
+
+name: Deploy to Server
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build project
+        run: npm run build
+
+      - name: Deploy to server
+        uses: easingthemes/ssh-deploy@v5
+        with:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
+          REMOTE_USER: ${{ secrets.REMOTE_USER }}
+          TARGET: ${{ secrets.REMOTE_TARGET }}
+          REMOTE_PORT: ${{ secrets.REMOTE_PORT || 22 }}
+          SOURCE: dist/
+          ARGS: -avz --delete
+          EXCLUDE: ".git,.github"
