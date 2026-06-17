@@ -46,11 +46,11 @@ export const Hero = () => {
               <form
                 action="#"
                 className="py-1 px-1 w-full flex gap-3 items-center text-heading-1
-                           shadow-lg shadow-box-shadow border border-box-border
-                           bg-box-bg rounded-full ease-linear focus-within:bg-body
+                           shadow-lg  border border-border
+                           bg-box rounded-full ease-linear focus-within:bg-body
                            focus-within:border-blue-600 duration-100"
               >
-                <span className="min-w-max pl-3 pr-2 border-r border-box-border">
+                <span className="min-w-max pl-3 pr-2 border-r border-border">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"

@@ -6,8 +6,8 @@ export const Numbers = () => {
       <Container className="flex justify-center items-center">
         <div
           className="mx-auto lg:mx-0 p-5 sm:p-6 sm:py-8
-             max-w-5xl rounded-3xl bg-box-bg border border-box-border
-             shadow-lg shadow-box-shadow md:divide-x divide-box-border
+             max-w-5xl rounded-3xl bg-box border border-border
+             shadow-lg  md:divide-x divide-border
              grid grid-cols-2 md:grid-cols-4"
         >
           {/* 卡片1 */}
@@ -41,7 +41,7 @@ export const Numbers = () => {
               {" "}
               99.9%{" "}
             </h2>
-            <p className="mt-2 text-heading-3"> 售后好评率 </p>
+            <p className="mt-2 text-heading-3"> 售后好评率</p>
           </div>
 
           <div className="text-center px-5">
