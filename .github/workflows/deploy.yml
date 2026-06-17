@@ -46,12 +46,24 @@ jobs:
             if command -v nginx &>/dev/null; then
               SITE_PATH="${{ vars.SITE_ROOT }}"
               CONF="/etc/nginx/sites-available/show1"
-
               echo 'c2VydmVyIHsKICAgIGxpc3RlbiA5MDkwOwogICAgc2VydmVyX25hbWUgXzsKICAgIHJvb3QgL3Zhci93d3cvc2hvdzE7CiAgICBpbmRleCBpbmRleC5odG1sOwoKICAgIGxvY2F0aW9uIC8gewogICAgICAgIHRyeV9maWxlcyAkdXJpICR1cmkvIC9pbmRleC5odG1sOwogICAgfQoKICAgIGxvY2F0aW9uIH4qIFwuKGpzfGNzc3xwbmd8anBnfGpwZWd8Z2lmfGljb3xzdmd8d29mZjI/KSQgewogICAgICAgIGV4cGlyZXMgMzBkOwogICAgICAgIGFkZF9oZWFkZXIgQ2FjaGUtQ29udHJvbCAicHVibGljLCBpbW11dGFibGUiOwogICAgfQoKICAgIGFkZF9oZWFkZXIgWC1Db250ZW50LVR5cGUtT3B0aW9ucyAibm9zbmlmZiI7CiAgICBhZGRfaGVhZGVyIFgtRnJhbWUtT3B0aW9ucyAiREVOWSI7Cn0=' | base64 -d | sudo tee "$CONF" > /dev/null
               sudo ln -sf "$CONF" /etc/nginx/sites-enabled/show1
               sudo sed -i "s|root .*;|root $SITE_PATH;|" "$CONF"
               sudo nginx -t && sudo systemctl reload nginx || true
             fi
+
+      - name: Prepare target directory
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT || '22' }}
+          script: |
+            SITE_PATH="${{ vars.SITE_ROOT }}"
+            sudo mkdir -p "$SITE_PATH"
+            sudo rm -rf "${SITE_PATH:?}"/*
+            sudo chown -R "$USER:$USER" "$SITE_PATH"
 
       - name: Deploy build to cloud server
         uses: appleboy/scp-action@v0.1.7
@@ -63,9 +75,8 @@ jobs:
           source: "dist/*"
           target: ${{ vars.SITE_ROOT }}
           strip_components: 1
-          rm: true
 
-      - name: Reload web server after deploy
+      - name: Fix permissions and reload nginx
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.SSH_HOST }}
@@ -73,8 +84,5 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.SSH_PORT || '22' }}
           script: |
-            echo "Deployment complete to ${{ vars.SITE_ROOT }}"
-            sudo chown -R www:www ${{ vars.SITE_ROOT }} 2>/dev/null || true
+            sudo chown -R www:www "${{ vars.SITE_ROOT }}" 2>/dev/null || true
             sudo nginx -s reload 2>/dev/null || sudo systemctl reload nginx 2>/dev/null || true
-            echo "Site reloaded on port 9090"
-
