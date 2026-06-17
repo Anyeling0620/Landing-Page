@@ -17,10 +17,18 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: "npm"
+          # 暂时关闭 cache，防止网络不佳时缓存读取失败导致错误
+          # cache: "npm" 
 
-      - name: Set npm registry
-        run: npm config set registry https://registry.npmmirror.com
+      - name: Configure npm and optimize network
+        run: |
+          # 强制设置镜像源
+          npm config set registry https://registry.npmmirror.com
+          # 增加超时时间（单位：毫秒），防止网络抖动导致的中断
+          npm config set fetch-retry-maxtimeout 300000
+          npm config set fetch-retry-mintimeout 20000
+          npm config set fetch-retries 10
+          npm config set fetch-timeout 300000
 
       - name: Install dependencies
         run: npm ci --verbose
@@ -33,13 +41,18 @@ jobs:
           # 使用 GitHub Variables 中定义的路径
           SITE_PATH="${{ vars.SITE_ROOT }}"
           
-          # 检查路径是否为空，防止误删根目录
+          # 检查路径是否为空，防止误删
           if [ -z "$SITE_PATH" ]; then
             echo "Error: SITE_ROOT variable is not set."
             exit 1
           fi
 
           echo "Deploying to $SITE_PATH"
+          # 确保目录存在
+          sudo mkdir -p $SITE_PATH
+          # 删除旧文件
           sudo rm -rf $SITE_PATH/*
+          # 复制新文件
           sudo cp -r dist/* $SITE_PATH/
+          # 修正权限，确保 Web 服务可读
           sudo chown -R www:www $SITE_PATH/
