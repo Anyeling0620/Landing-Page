@@ -10,7 +10,7 @@ export const Footer = () => {
           "
     >
       <Container className="pb-8">
-        <div className="flex flex-col md:flex-row justify-between items-center">
+        <div className="flex flex-col lg:flex-row justify-between items-center gap-y-20">
           <div className="flex items-center gap-3 mb-4 md:mb-0">
             <img src={logo} alt="Deepsleep Logo" className="w-7 h-7" />
             <span className="text-lg font-semibold text-heading-1">
@@ -18,7 +18,7 @@ export const Footer = () => {
             </span>
           </div>
 
-          <div className="absolute left-1/2 -translate-x-1/2 flex flex-row">
+          <div className="absolute left-1/2 -translate-x-1/2 top-1/2 flex flex-row">
             <a
               href="https://beian.miit.gov.cn/"
               target="_blank"
