@@ -29,9 +29,9 @@ export const Hero = () => {
             className="text-heading-1 text-3xl sm:text-4xl md:text-5xl xl:text-6xl
                        font-bold"
           >
-            Empower Your Business{" "}
+            个人学习使用{" "}
             <span
-              className="
+              className="block text-center
           text-transparent bg-clip-text bg-linear-to-r
           from-indigo-600 via-purple-500 to-violet-600 ml-2 bg-[length:200%_auto]"
               style={{
@@ -39,7 +39,7 @@ export const Hero = () => {
                 animation: "gradientFlow 0.5s linear infinite",
               }}
             >
-              with AI
+              无盈利用途
             </span>
           </h1>
           <Paragraph className="mt-8">

@@ -1,8 +1,9 @@
 export const pricingPlans = [
   {
     title: "Basic",
-    price: "$19.99 / month",
+    price: "$0 / month",
     features: [
+      "个人演示使用，无盈利用途",
       "1 个活跃项目",
       "10GB 存储空间",
       "基础数据分析",
@@ -13,8 +14,9 @@ export const pricingPlans = [
   },
   {
     title: "Professional",
-    price: "$49.99 / month",
+    price: "$0 / month",
     features: [
+      "个人演示使用，无盈利用途",
       "10 个活跃项目",
       "50GB 存储空间",
       "高级数据分析（含预测）",
@@ -25,8 +27,9 @@ export const pricingPlans = [
   },
   {
     title: "Enterprise",
-    price: "$99.99 / month",
+    price: "$0 / month",
     features: [
+      "个人演示使用，无盈利用途",
       "无限活跃项目",
       "200GB 存储空间",
       "专属数据分析（定制模型）",
