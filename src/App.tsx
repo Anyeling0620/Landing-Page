@@ -1,3 +1,4 @@
+import { SpeedInsights } from '@vercel/speed-insights/react';
 import { Layout } from "./components/Layout";
 import { AboutUs } from "./components/sections/AboutUs";
 import { Brands } from "./components/sections/Brands";
@@ -16,6 +17,7 @@ function App () {
       <AboutUs />
       <Pricing />
       <CTA />
+      <SpeedInsights />
     </Layout>
   );
 }
